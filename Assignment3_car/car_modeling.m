@@ -2,9 +2,11 @@ clc
 close all
 clear variables
 
+
 n = 15;
 m = 15;
 GW = createGridWorld(n,m);
+
 
 % parametro randomico per la posizione iniziale
 k = randi([1 10]);
@@ -81,6 +83,11 @@ for t = 1:numEpisodi
     reset(env)
     isTerminal = false;
     
+    s0 = randi(S);
+    a0 = randi(S);
+    
+    [s,a,r] = 
+    
     while ~isTerminal
         % fai azione eps-greedy => aggiorna current state
         
@@ -112,7 +119,7 @@ end
      s0 = randi(S);  %prendo le S con sub2ind degli stati iniziali
      a0 = randi(A);  %azione casuale
      [s] = next_state(s0, policy, epsilon);   %scelta dell'azione epsilon greedy
-%     G = 0;
+     G = 0;
 %     for t = length(s)-1: -1: 1
 %         G = r(t) + gamma*G;
 %         N(s(t),a(t)) = N(s(t),a(t)) + 1;
@@ -120,33 +127,13 @@ end
 %         Astar = find(Q(s(t),:) == max(Q(s(t),:)), 1, 'first');
 %         policy(s(t)) = Astar;
 %     end
-% end
-
+ end
 %%
 env = rlMDPEnv(GW)
 plot(env)
 
 %%
 
-function [new_state,next_vel] = next_state(old_state, action, current_vel)
-
-next_vel = [min(current_vel(1) + action(1),5), min(current_vel(2) + action(2),5)];
-real_old_state = str2num(old_state); % non stringa
-real_new_state = [max(real_old_state(1) - next_vel(1),1), min(real_old_state(2) + next_vel(2),15)]; % N.B. 1 e 15 del max dipendono dalla larghezza della mappa
-new_state = "[" + num2str(real_new_state(1))+"," + num2str(max(1,real_new_state(2))) + "]";
-
-end
 
 
-function [action] = action_epsilon_greedy(actions,epsilon)
-    
-    ret = rand(1,1);
-    
-    if ret <= epsilon
-        I = randi([1,4],1,1);  %esplorazione random
-    else
-        [M,I] = max(Q); % scelta greedy
-        epsilon = (epsilon/(step*j+1));
-        numazionigreedy = numazionigreedy+1;
-    end
-end
+
