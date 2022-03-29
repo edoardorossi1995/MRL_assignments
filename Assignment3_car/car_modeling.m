@@ -62,7 +62,8 @@ A = 9;
 
 [GW.CurrentState, current_vel] = next_state(GW.CurrentState, a(4,:), current_vel)
 
-
+% al contrario:
+% ?
 
 N = zeros(S,A);
 Q = zeros(S,A);
@@ -86,7 +87,7 @@ for t = 1:numEpisodi
     s0 = randi(S);
     a0 = randi(S);
     
-    [s,a,r] = 
+    %%[s,a,r] = 
     
     while ~isTerminal
         % fai azione eps-greedy => aggiorna current state
@@ -118,7 +119,7 @@ end
     % S = sub2ind([15 15],start_state(1),start_state(2));
      s0 = randi(S);  %prendo le S con sub2ind degli stati iniziali
      a0 = randi(A);  %azione casuale
-     [s] = next_state(s0, policy, epsilon);   %scelta dell'azione epsilon greedy
+     [s ] = next_state(s0, policy, epsilon);   %scelta dell'azione epsilon greedy
      G = 0;
 %     for t = length(s)-1: -1: 1
 %         G = r(t) + gamma*G;
