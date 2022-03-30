@@ -60,7 +60,7 @@ S = n*m*vx_max*vy_max;
 a = [[0,0];[1,0];[1,1];[0,1];[-1,0];[-1,1];[-1,-1];[0,-1];[1,-1]];
 A = 9;
 
-[GW.CurrentState, current_vel] = next_state(GW.CurrentState, a(4,:), current_vel)
+% [GW.CurrentState, current_vel] = next_state(GW.CurrentState, a(4,:), current_vel)
 
 % al contrario:
 % ?
@@ -73,7 +73,21 @@ policy = randi(A,S,1);
 env = rlMDPEnv(GW)
 plot(env)
 
-%%
+%% 
+for e = 1:numEpisodes
+     %S = sub2ind([15 15],start_state(1),start_state(2));
+     s0 = randi(S);  %prendo le S con sub2ind degli stati iniziali
+     a0 = randi(A);  %azione casuale
+     [s, a, r] = play_episode(s0, policy, epsilon,S);   %scelta dell'azione epsilon greedy
+     G = 0;
+%     for t = length(s)-1: -1: 1
+%         G = r(t) + gamma*G;
+%         N(s(t),a(t)) = N(s(t),a(t)) + 1;
+%         Q(s(t),a(t)) = Q(s(t),a(t)) + 1/N(s(t),a(t))*(G - Q(s(t),a(t)));
+%         Astar = find(Q(s(t),:) == max(Q(s(t),:)), 1, 'first');
+%         policy(s(t)) = Astar;
+%     end
+ end
 
 
 
@@ -115,20 +129,7 @@ end
 
 %%
 
- for e = 1:numEpisodes
-    % S = sub2ind([15 15],start_state(1),start_state(2));
-     s0 = randi(S);  %prendo le S con sub2ind degli stati iniziali
-     a0 = randi(A);  %azione casuale
-     [s ] = next_state(s0, policy, epsilon);   %scelta dell'azione epsilon greedy
-     G = 0;
-%     for t = length(s)-1: -1: 1
-%         G = r(t) + gamma*G;
-%         N(s(t),a(t)) = N(s(t),a(t)) + 1;
-%         Q(s(t),a(t)) = Q(s(t),a(t)) + 1/N(s(t),a(t))*(G - Q(s(t),a(t)));
-%         Astar = find(Q(s(t),:) == max(Q(s(t),:)), 1, 'first');
-%         policy(s(t)) = Astar;
-%     end
- end
+
 %%
 env = rlMDPEnv(GW)
 plot(env)
