@@ -7,6 +7,8 @@ n = 15;
 m = 15;
 GW = createGridWorld(n,m);
 
+numEpisodes = 1e3;
+epsilon = 0.5;
 
 % parametro randomico per la posizione iniziale
 k = randi([1 10]);
@@ -68,73 +70,46 @@ A = 9;
 N = zeros(S,A);
 Q = zeros(S,A);
 
-policy = randi(A,S,1);
+%policy = randi(A,S,1);
 
 env = rlMDPEnv(GW)
 plot(env)
 
-%% 
-for e = 1:numEpisodes
-     %S = sub2ind([15 15],start_state(1),start_state(2));
-     s0 = randi(S);  %prendo le S con sub2ind degli stati iniziali
-     a0 = randi(A);  %azione casuale
-     [s, a, r] = play_episode(s0, policy, epsilon,S);   %scelta dell'azione epsilon greedy
-     G = 0;
-%     for t = length(s)-1: -1: 1
-%         G = r(t) + gamma*G;
-%         N(s(t),a(t)) = N(s(t),a(t)) + 1;
-%         Q(s(t),a(t)) = Q(s(t),a(t)) + 1/N(s(t),a(t))*(G - Q(s(t),a(t)));
-%         Astar = find(Q(s(t),:) == max(Q(s(t),:)), 1, 'first');
-%         policy(s(t)) = Astar;
-%     end
- end
-
-
-
-
 %%
-for t = 1:numEpisodi
+for e = 1:numEpisodes
     
-    reset(env)
-    isTerminal = false;
+    s0 = randi(S);  %prendo le S con sub2ind degli stati iniziali
+    a0 = randi(A);  %azione casuale
+    gamma = 0.6;
+    obstacle_states = str2double(GW.ObstacleStates);
+    terminal_states = str2double(GW.TerminalStates);
     
-    s0 = randi(S);
-    a0 = randi(S);
+    [s, a, r] = play_episode(s0, a0, epsilon,obstacle_states,terminal_states);   %scelta dell'azione epsilon greedy
+    G = 0;
+    [GW.CurrentState(1),GW.CurrentState(2)] = ind2sub(S,s);
     
-    %%[s,a,r] = 
     
-    while ~isTerminal
-        % fai azione eps-greedy => aggiorna current state
-        
-        epsion = 0.5;
-        
-        
-        reward = -1;
-        % se trovo ostacolo
-        if ~isempty(find((GW.CurrentState == GW.ObstacleStates), 1))
-            
-            reward  = -1000*m*n;
-            isTerminal = true;
-            
-        else
-            % se sono in uno stato terminale
-            if (find((GW.CurrentState == GW.TerminalStates)))
-                
-                isTerminale = true;
-                
-            end
-        end
+    e
+    
+    for t = length(s)-1: -1: 1
+        G = r(t) + gamma*G;
+        N(s(t),a(t)) = N(s(t),a(t)) + 1;
+        Q(s(t),a(t)) = Q(s(t),a(t)) + 1/N(s(t),a(t))*(G - Q(s(t),a(t)));
+        Astar = find(Q(s(t),:) == max(Q(s(t),:)), 1, 'first');
+        policy  = Astar;
     end
+    hold on
+    env = rlMDPEnv(GW)
+    plot(env)
+    
 end
 
-%%
+
 
 
 %%
 env = rlMDPEnv(GW)
 plot(env)
-
-%%
 
 
 
