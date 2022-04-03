@@ -60,7 +60,7 @@ S = n*m*(vx_max+1)*(vy_max+1);
 % def azioni
 
 % incrementi unitari di velocità sulle due direzioni N-E, solo aumento
-a = [[0,0];[1,0];[1,1];[0,1]]; %[-1,0];[-1,1];[-1,-1];[0,-1];[1,-1]];
+a = [[0,0];[1,0];[0,1];[1,1]]; %[-1,0];[-1,1];[-1,-1];[0,-1];[1,-1]];
 A_ = size(a);
 A = A_(1);
 
@@ -92,13 +92,15 @@ end
 
 
 %%
+
 for e = 1:numEpisodes
     
     s0 = randi(S);   %prendo le S con sub2ind degli stati iniziali
     %a0 = policy(s0); %randi(A);  %azione casuale
     G = 0;
       
-    [s, a, r] = play_episode(s0, A, policy, epsilon, obstacle_states,terminal_states);
+    [s, a, r] = play_episode ...
+        (s0, A, policy, epsilon, obstacle_states,terminal_states);
     
     for t = length(s)-1: -1: 1
         G = r(t) + gamma*G;
@@ -111,12 +113,6 @@ for e = 1:numEpisodes
 end
 
 
-
-
 %%
-env = rlMDPEnv(GW)
-plot(env)
-
-
 
 
