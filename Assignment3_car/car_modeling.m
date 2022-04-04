@@ -118,12 +118,12 @@ end
 
 % inizzializzazione parametri
 numEpisodes = 2e3;
-epsilon = 0.5;
+epsilon = 0.3;
 N = zeros(S,A);
 Q = zeros(S,A);
 %load policy.mat
 policy = randi(A,S,1);
-gamma = 0.6;
+gamma = 1;
 
 for e = 1:numEpisodes
     
