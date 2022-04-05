@@ -124,7 +124,7 @@ end
 
 %% inizzializzazione parametri
 
-numEpisodes = 50e3;
+numEpisodes = 100e3;
 epsilon = 0.3;
 N = zeros(S,A);
 Q = zeros(S,A);
@@ -151,7 +151,7 @@ for e = 1:numEpisodes
         Astar = find(Q(s(t),:) == max(Q(s(t),:)), 1, 'first');
         policy(s(t))  = Astar;
     end
-    e
+    %e
 end
 %%
 % policy attuale con k = 6, 5 stati terminati (h, da cambiare che si
@@ -225,7 +225,7 @@ while ~isTerminal
         os = [os; os_h];
     end
     
-    [x,y,v_x,v_y]
+    %[x,y,v_x,v_y]
     
     sub_new_pos = sub2ind([15,15], x, y);
     
