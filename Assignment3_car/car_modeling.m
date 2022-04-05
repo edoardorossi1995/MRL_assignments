@@ -96,7 +96,6 @@ A = A_(1);
 
 
 env = rlMDPEnv(GW)
-plot(env)
 
 obstacle_states = [];
 for i = 1:size(GW.ObstacleStates)
@@ -112,10 +111,11 @@ end
 
 
 % s0_sl contiene tutti gli stati sulla start line
-obs_temp = min(obstacle_states(:,2));
-s0_sl = [];
+%obs_temp = min(obstacle_states(:,2));
+s0 = sub2ind([15 15 11 11], 15, 1, 6,6);
+s0_sl = [s0];
 
-for i = 1:obs_temp-1
+for i = 1:k-1%obs_temp-1
     s0_i = sub2ind([15 15 11 11], 15, i, 6,6);
     s0_sl = [s0_sl;s0_i];
 end
@@ -124,12 +124,12 @@ end
 
 %% inizzializzazione parametri
 
-numEpisodes = 2e2;
+numEpisodes = 50e3;
 epsilon = 0.3;
 N = zeros(S,A);
 Q = zeros(S,A);
-%load policy.mat
-policy = randi(A,S,1);
+load policy.mat
+%policy = randi(A,S,1);
 gamma = 1;
 
 %% learning
@@ -160,12 +160,12 @@ save policy.mat policy;
 
 %% esecuzione
 
-start_pos = [n,randi(obs_temp-1)];
+start_pos = [n,randi([2,(k-1)])];
 
 % CurrentState rappresenta la POSIZIONE su GW, non lo stato.
 % Lo stato è definito da (x,y,vx,vy)
 
-% convalida dl GW
+% creazione GW
 env = rlMDPEnv(GW);
 env.ResetFcn = @() randi([1 10]);
 
@@ -175,6 +175,7 @@ v_y = 0;
 R = 0;
 isTerminal = false;
 
+plot(env)
 while ~isTerminal
     
     pos = str2num(GW.CurrentState());
