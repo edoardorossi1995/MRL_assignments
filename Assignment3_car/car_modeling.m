@@ -9,7 +9,7 @@ GW = createGridWorld(n,m);
 
 
 % parametro randomico per la posizione iniziale
-k = randi([1 10]);
+k = 6;%randi([1 10]);
 
 start_pos = [n,max(1,10 - k)];
 
@@ -18,9 +18,9 @@ start_pos = [n,max(1,10 - k)];
 GW.CurrentState =  "[" + num2str(start_pos(1))+"," + num2str(start_pos(2)) + "]";
 
 % creazione stati terminali
-h = randi([1 5]);
+h = 5;%randi([1 5]);
 terminals = [];
-for i = 1:h
+for i = 2:h
     terminals = [terminals; string(['[',num2str(i),',15]'])];
 end
 GW.TerminalStates = terminals;
@@ -34,6 +34,12 @@ for i = 1:comp_i
         obstacles = [obstacles; string(['[',num2str(n-i+1),',',num2str(m-j+1),']'])];
     end
     %     j = j+randi([-1 2]);
+end
+for i = 1:n
+    obstacles = [obstacles; string(['[',num2str(i),',',num2str(1),']'])];
+end
+for q = 1:15
+    obstacles = [obstacles; string(['[',num2str(1),',',num2str(q),']'])];
 end
 GW.ObstacleStates = obstacles;
 
@@ -106,7 +112,7 @@ end
 
 
 % s0_sl contiene tutti gli stati sulla start line
-obs_temp = min(obstacle_states(:,2))
+obs_temp = min(obstacle_states(:,2));
 s0_sl = [];
 
 for i = 1:obs_temp-1
@@ -114,10 +120,11 @@ for i = 1:obs_temp-1
     s0_sl = [s0_sl;s0_i];
 end
 
-%% learning
 
-% inizzializzazione parametri
-numEpisodes = 2e3;
+
+%% inizzializzazione parametri
+
+numEpisodes = 2e2;
 epsilon = 0.3;
 N = zeros(S,A);
 Q = zeros(S,A);
@@ -125,6 +132,7 @@ Q = zeros(S,A);
 policy = randi(A,S,1);
 gamma = 1;
 
+%% learning
 for e = 1:numEpisodes
     
     
@@ -146,7 +154,8 @@ for e = 1:numEpisodes
     e
 end
 %%
-
+% policy attuale con k = 6, 5 stati terminati (h, da cambiare che si
+% ripete)
 save policy.mat policy;
 
 %% esecuzione
@@ -155,6 +164,11 @@ start_pos = [n,randi(obs_temp-1)];
 
 % CurrentState rappresenta la POSIZIONE su GW, non lo stato.
 % Lo stato è definito da (x,y,vx,vy)
+
+% convalida dl GW
+env = rlMDPEnv(GW);
+env.ResetFcn = @() randi([1 10]);
+
 GW.CurrentState =  "[" + num2str(start_pos(1))+"," + num2str(start_pos(2)) + "]";
 v_x = 0;
 v_y = 0;
@@ -210,8 +224,8 @@ while ~isTerminal
         os = [os; os_h];
     end
     
-    x
-    y
+    [x,y,v_x,v_y]
+    
     sub_new_pos = sub2ind([15,15], x, y);
     
     if ~isempty(find((sub_new_pos == ts),1))
