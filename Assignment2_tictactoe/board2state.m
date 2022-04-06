@@ -1,4 +1,6 @@
-function [id] = board2state(grid)   % da configurazione a valore in base 10
+function [id] = board2state(grid)   
+
+% da configurazione a valore in base 10
 
 id = 0;
 grid_ = zeros(1,9);
