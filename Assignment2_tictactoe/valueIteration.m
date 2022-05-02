@@ -25,42 +25,46 @@ while true
 end
 toc
 
-%%
+%% partenza
 clc
 
 grid = [0,0,0; 0,0,0; 0,0,0]
 id = board2state(grid)
-value( id == vS)
-
-%%
+index_R = find(id == vS)
+R(index_R,:)
+%% agent - 1
 s1 = board2state(grid);
 grid = azione_value(grid, policy(find(vS == s1)),1)
 id = board2state(grid)
-value( id == vS)
-[num,ind] = check_value(value);
-%%
+%% oppo - 1
 grid = azione_value(grid,1,2)
 id = board2state(grid)
-value( id == vS)
-%%
-num = check_value(value);
+index_R = find(id == vS)
+R(index_R,:)
+%% agent - 2
 s2 = board2state(grid);
 grid = azione_value(grid, policy(find(vS == s2)),1)
 id = board2state(grid)
-value( id == vS)
-%%
+%% oppo - 2
 grid = azione_value(grid,7,2)
 s3 = board2state(grid);
-num = check_value(value);
 id = board2state(grid)
-value( id == vS)
-%%
-num = check_value(value);
+index_R = find(id == vS)
+R(index_R,:)
+
+
+%% agent - 3
 s3 = board2state(grid);
 grid = azione_value(grid, policy(find(vS == s3)),1)
 id = board2state(grid)
-value( id == vS)
 
+
+%% oppo - 3
+grid = azione_value(grid,2,2)
+s4 = board2state(grid);
+id = board2state(grid)
+index_R = find(id == vS)
+R(index_R,:)
 
 %% fun
 
