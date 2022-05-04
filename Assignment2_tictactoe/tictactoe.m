@@ -75,7 +75,7 @@ for s = 1:num_vS    % indice stato di partenza s
             end
         end
         
-        
+        % check sulla posizione in cui vorrei giocare
         prev = grid_(a);
         
         % se sovrascrive
@@ -88,47 +88,55 @@ for s = 1:num_vS    % indice stato di partenza s
             
             ret = win_condition(grid);
             
-            % se vince
+            
             if ret == 1
+                % se vince
+                
                 R(s,a) = 1;
                 
-                % se perde
             elseif ret == -1
-                R(s,a) = -1;
                 
-                % se il gioco continua
-            elseif ret == 0
+                % se pareggia
+                
                 R(s,a) = 0;
+                
+            else
+                % se il gioco continua e l'avversario gioca
+                % if ret == 0
+                
+                % il transpose è perché il find funziona a colonne
+                empty_index = find(transpose(grid) == 0);
+                ei_size = length(empty_index);
+                p_lose = 1/ei_size;
+                rsa_array =zeros(ei_size,1);
+
+                
+                for i = 1:ei_size
+                    
+                    temp_grid = azione_value(grid,empty_index(i),2);                   
+                    
+                    temp_ret = win_condition(temp_grid);
+                                        
+                    if temp_ret == -2
+                        rsa = -1;
+                        
+                    else
+                        rsa = 0;
+                    end
+                    rsa_array(i) = rsa;
+                    
+                end
+                % il reward sarà la media
+
+                R(s,a) = mean(rsa_array);
+                
+
             end
-            
-            
-            
         end
     end
 end
-
-%%
-
-save data.mat P R vS
-
-%%
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    %%
+    
+    save data.mat P R vS
+    
+    %%

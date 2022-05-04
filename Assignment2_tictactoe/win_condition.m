@@ -26,7 +26,7 @@ else
             (grid(1,1) == 2 && grid(2,2) == 2 && grid(3,3) == 2) || ...
             (grid(3,1) == 2 && grid(2,2) == 2 && grid(1,3) == 2)
             % condizioni di sconfitta
-        out = -1;   % sconfitta
+        out = -2;   % sconfitta
     end
 end
 end

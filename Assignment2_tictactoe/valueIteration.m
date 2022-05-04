@@ -37,7 +37,7 @@ s1 = board2state(grid);
 grid = azione_value(grid, policy(find(vS == s1)),1)
 id = board2state(grid)
 %% oppo - 1
-grid = azione_value(grid,1,2)
+grid = azione_value(grid,2,2)
 id = board2state(grid)
 index_R = find(id == vS)
 R(index_R,:)
@@ -60,20 +60,10 @@ id = board2state(grid)
 
 
 %% oppo - 3
-grid = azione_value(grid,2,2)
+grid = azione_value(grid,9,2)
 s4 = board2state(grid);
 id = board2state(grid)
 index_R = find(id == vS)
 R(index_R,:)
 
-%% fun
 
-function [num] = check_value(value)
-num = 0;
-for i=1:length(value)
-    if value(i) < 0
-        num = num +1;
-    end
-end
-
-end
