@@ -1,5 +1,7 @@
 function [grid] = azione_value(grid,a,value)     % con if, funziona
 
+% azione dato un valore su griglia indicizzata
+
 if (a == 1)
     grid = azione_sing(grid,1,1,value);
 elseif (a == 2)
