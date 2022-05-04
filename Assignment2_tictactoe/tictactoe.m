@@ -10,9 +10,10 @@ a0 = 9;
 
 % riduzione stati
 
-S = [0:S_tot-1];
-num_S = length(S)
+S = (0:S_tot-1);
+num_S = length(S);
 vS = [];    % valid states
+
 
 % inserimento dei soli stati con stesso numero di X e O nella griglia
 for i=0:(length(S)-1)
@@ -26,11 +27,10 @@ for i=0:(length(S)-1)
     vS;
 end
 
-num_vS = length(vS)
+num_vS = length(vS);
 
 %%  matrice P
 
-%POTREBBE ESSERCI UN ERRORE GIGANTE => RIVEDI DIMENSIONE FIND
 P = zeros(num_vS+1, num_vS+1 , a0);
 
 for s = 1:num_vS    % indice stato di partenza s
@@ -39,7 +39,8 @@ for s = 1:num_vS    % indice stato di partenza s
         
         grid = state2board(vS(s));
         grid = azione_value(grid,a,1);
-        empty_index = find(transpose(grid) == 0); % questo perché il find cicla per colonne
+        % questo perché il find cicla per colonne
+        empty_index = find(transpose(grid) == 0);
         probAS = prob_nextState(grid);
         
         for i=1:length(empty_index)
@@ -58,6 +59,13 @@ end
 %% matrice R
 
 R = zeros(num_vS+1, a0);
+
+victory_reward = 1;
+draw_reward = -1;
+lose_reward = -1;
+fail_reward = -1000;
+
+% time_penalty_reward = 0;
 
 for s = 1:num_vS    % indice stato di partenza s
     
@@ -80,7 +88,7 @@ for s = 1:num_vS    % indice stato di partenza s
         
         % se sovrascrive
         if (prev == 1 || prev == 2)
-            R(s,a) = -1000;
+            R(s,a) = fail_reward;
             
             % se libero
         elseif prev == 0
@@ -92,13 +100,13 @@ for s = 1:num_vS    % indice stato di partenza s
             if ret == 1
                 % se vince
                 
-                R(s,a) = 1;
+                R(s,a) = victory_reward;
                 
             elseif ret == -1
                 
                 % se pareggia
                 
-                R(s,a) = 0;
+                R(s,a) = draw_reward;
                 
             else
                 % se il gioco continua e l'avversario gioca
@@ -109,16 +117,16 @@ for s = 1:num_vS    % indice stato di partenza s
                 ei_size = length(empty_index);
                 p_lose = 1/ei_size;
                 rsa_array =zeros(ei_size,1);
-
+                
                 
                 for i = 1:ei_size
                     
-                    temp_grid = azione_value(grid,empty_index(i),2);                   
+                    temp_grid = azione_value(grid,empty_index(i),2);
                     
                     temp_ret = win_condition(temp_grid);
-                                        
+                    
                     if temp_ret == -2
-                        rsa = -1;
+                        rsa = lose_reward;
                         
                     else
                         rsa = 0;
@@ -127,16 +135,16 @@ for s = 1:num_vS    % indice stato di partenza s
                     
                 end
                 % il reward sarà la media
-
+                
                 R(s,a) = mean(rsa_array);
                 
-
+                
             end
         end
     end
 end
-    %%
-    
-    save data.mat P R vS
-    
-    %%
+%%
+
+save data.mat P R vS
+
+%%

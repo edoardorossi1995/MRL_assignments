@@ -66,4 +66,3 @@ id = board2state(grid)
 index_R = find(id == vS)
 R(index_R,:)
 
-
