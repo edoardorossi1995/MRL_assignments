@@ -24,7 +24,8 @@ while true
     end
 end
 toc
-
+%%
+save policy_file.mat policy
 %% partenza
 clc
 
